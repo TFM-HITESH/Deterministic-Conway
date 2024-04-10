@@ -1,0 +1,2 @@
+1. Visited cells can have different colour
+2. In the GUI, different colours for cells at different stages of life
