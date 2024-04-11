@@ -15,8 +15,24 @@ class Cell:
     bottomLeft = 0
     bottomRight = 0
 
-    def __init__(self):
-        pass
+    # Creating a new cell
+    def __init__(self, isAlive : int):
+        self.isAlive = isAlive
+
+        self.top = 0
+        self.bottom = 0 
+        self.left = 0 
+        self.right = 0 
+        self.topLeft = 0 
+        self.topRight = 0 
+        self.bottomLeft = 0 
+        self.bottomRight = 0
+
+    def printCell(self):
+        if(self.isAlive == 1):
+            print("■ ", sep = "", end = "")
+        else:
+            print("□ ", sep = "", end = "")
 
     # Returns the number of alive neighbours
     def findSum(self):
@@ -41,6 +57,42 @@ class Cell:
             if(neighbours == 3):
                 self.isAlive = 1
                 # Comes alive of Reproduction
+
+    def updateNeighbours(self, topNeighbour, bottomNeighbour, leftNeighbour, rightNeighbour, topLeftNeighbour, topRightNeighbour, bottomLeftNeighbour, bottomRightNeighbour):
+        # Taking objects of all the neighbours that surround the current cell and updating the values of current cell in case theyre alive
+
+        if(topNeighbour.isAlive == 1):
+            self.top = 1
+        else:
+            self.top = 0
+        if(bottomNeighbour.isAlive == 1):
+            self.bottom = 1
+        else:
+            self.bottom = 0
+        if(leftNeighbour.isAlive == 1):
+            self.left = 1
+        else:
+            self.left = 0
+        if(rightNeighbour.isAlive == 1):
+            self.right = 1
+        else:
+            self.right = 0
+        if(topLeftNeighbour.isAlive == 1):
+            self.topLeft = 1
+        else:
+            self.topLeft = 0
+        if(topRightNeighbour.isAlive == 1):
+            self.topRight = 1
+        else:
+            self.topRight = 0
+        if(bottomLeftNeighbour.isAlive == 1):
+            self.bottomLeft = 1
+        else:
+            self.bottomLeft = 0
+        if(bottomRightNeighbour.isAlive == 1):
+            self.bottomRight = 1
+        else:
+            self.bottomRight = 0
 
 
     
