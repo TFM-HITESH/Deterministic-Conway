@@ -4,24 +4,16 @@ import time
 
 X_DIM = 10
 Y_DIM = 10
+ALIVE_CELL = Cell(1)
+DEAD_CELL = Cell(0)
+
 
 def main():
     print("Start Position : ")
-    cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=1)
+    cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=0)
     printGrid(cellGrid)
 
     startGrid=[[0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,1,0,0,0,0],
-               [0,0,0,0,1,1,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,1,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0]]
-    
-    startGrid2=[[0,0,0,0,0,0,0,0,0,0],
                [0,0,0,1,0,0,0,0,0,0],
                [0,0,0,0,1,0,0,0,0,0],
                [0,0,1,1,1,0,0,0,0,0],
@@ -33,7 +25,8 @@ def main():
                [0,0,0,0,0,0,0,0,0,0]]
     
     print("User updated positions : ")
-    generateGridStart(cellGrid=cellGrid, startGrid=startGrid2)
+    generateGridStart(cellGrid=cellGrid, startGrid=startGrid
+                      )
     printGrid(cellGrid)
 
     # Preparing the grid and giving info about number of neighbours
@@ -44,7 +37,7 @@ def main():
     n = int(input("Enter number of cycles : "))
 
     for i in range(n):
-        time.sleep(1)
+        time.sleep(0.4)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
         printGrid(cellGrid=cellGrid)
@@ -92,18 +85,43 @@ def updateGrid(cellGrid):
 
 #Updates everyone's neighbours, based on the new grid
 def updateGridNeighbours(cellGrid):
-    for row in range(1, len(cellGrid)-1):
-        for col in range(1, len(cellGrid[row])-1):
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
             #top = row--, bottom = row++, left = col--, right = col++
-            topRight = cellGrid[row - 1][col + 1]
-            topLeft = cellGrid[row - 1][col - 1]
-            bottomRight = cellGrid[row + 1][col + 1]
-            bottomLeft = cellGrid[row + 1][col - 1]
-            top = cellGrid[row - 1][col]
-            bottom = cellGrid[row + 1][col]
-            left = cellGrid[row][col - 1]
-            right = cellGrid[row][col + 1]
-
+            try:
+                topRight = cellGrid[row - 1][col + 1]
+            except:
+                topRight = DEAD_CELL
+            try:
+                topLeft = cellGrid[row - 1][col - 1]
+            except:
+                topLeft = DEAD_CELL
+            try:
+                bottomRight = cellGrid[row + 1][col + 1]
+            except:
+                bottomRight = DEAD_CELL
+            try:
+                bottomLeft = cellGrid[row + 1][col - 1]
+            except:
+                bottomLeft = DEAD_CELL
+            try:
+                top = cellGrid[row - 1][col]
+            except:
+                top = DEAD_CELL
+            try:
+                bottom = cellGrid[row + 1][col]
+            except: 
+                bottom = DEAD_CELL
+            try:
+                left = cellGrid[row][col - 1]
+            except:
+                left = DEAD_CELL
+            try: 
+                right = cellGrid[row][col + 1] 
+            except:
+                right = DEAD_CELL
+            
+            # Updating the neighbours
             cellGrid[row][col].updateNeighbours(topRightNeighbour=topRight, topLeftNeighbour=topLeft, bottomRightNeighbour=bottomRight, bottomLeftNeighbour=bottomLeft, topNeighbour=top, bottomNeighbour=bottom, rightNeighbour=right, leftNeighbour=left)
 
 def singleCycle(cellGrid):
