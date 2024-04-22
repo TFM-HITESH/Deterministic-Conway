@@ -1,0 +1,14 @@
+GOLWindowWidth = GOLWindow.geometry().width() # horizontal size
+    GOLWindowHeight = GOLWindow.geometry().height() # vertical size
+
+    GOLWindowCenterX = GOLWindowWidth / 2
+    GOLWindowCenterY = GOLWindowHeight / 2
+
+titleLabel.adjustSize()
+    # Calculate the position to center the title label
+    titleLabelWidth = titleLabel.sizeHint().width()
+    titleLabelHeight = titleLabel.sizeHint().height()
+    titleLabelXOffset = GOLWindowCenterX - titleLabelWidth / 2
+    titleLabelYOffset = GOLWindowCenterY - titleLabelHeight / 2
+    # Set the position of the title label
+    titleLabel.move(int(titleLabelXOffset * 1), int(titleLabelYOffset * 0.1))

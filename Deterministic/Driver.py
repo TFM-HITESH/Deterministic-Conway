@@ -2,6 +2,8 @@ from Cell import Cell
 import random
 import time
 
+
+# global variables
 X_DIM = 10
 Y_DIM = 10
 ALIVE_CELL = Cell(1)
