@@ -3,6 +3,7 @@ import random
 import time
 
 from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QFont
 
 
@@ -11,7 +12,7 @@ X_DIM = 80
 Y_DIM = 80
 ALIVE_CELL = Cell(1)
 DEAD_CELL = Cell(0)
-
+CURRENT_STEP = 0
 
 GOL_LIST = []
 
@@ -43,15 +44,10 @@ def main():
 
     generateGOLLIST(n, cellGrid=cellGrid)
     
-    currentStep = 0
-    generateGUI(currentStep=currentStep)
-    
+    generateGUI()
     
 
-    
-        
-
-def generateGUI(currentStep):
+def generateGUI():
     GOLApp = QApplication([])
     GOLWindow = QWidget()
 
@@ -112,10 +108,13 @@ def generateGUI(currentStep):
         "}"
     )
 
+    stepForwardButton.clicked.connect(updateForwardGUI)
+    stepBackwardButton.clicked.connect(updateBackwardGUI)
+
     GOLButtonLayout.addWidget(stepBackwardButton)
     GOLButtonLayout.addWidget(stepForwardButton)
 
-    GOLBoardLayout = generateGridLayout(GOL_LIST[currentStep], GOLWindow=GOLWindow, GOLWindowWidth=GOLWindowWidth, GOLWindowHeight=GOLWindowHeight)
+    GOLBoardLayout = generateGridLayout(GOL_LIST[CURRENT_STEP], GOLWindow=GOLWindow, GOLWindowWidth=GOLWindowWidth, GOLWindowHeight=GOLWindowHeight)
 
 
     GOLLayout.addWidget(titleLabel)
@@ -124,10 +123,13 @@ def generateGUI(currentStep):
 
     GOLWindow.setLayout(GOLLayout)
     
-
+    # timer = QTimer()
+    # timer.timeout.connect()
+    # timer.start(1000)  # Trigger update every 1000 milliseconds (1 second)
 
     GOLWindow.show()
     GOLApp.exec_()
+
 
 def generateGridLayout(cellGrid, GOLWindow, GOLWindowWidth, GOLWindowHeight):
     GOLBoardLayout = QVBoxLayout()
@@ -139,7 +141,7 @@ def generateGridLayout(cellGrid, GOLWindow, GOLWindowWidth, GOLWindowHeight):
         for j in range(len(cellGrid[0])):
             if(cellGrid[i][j].isAlive == 1):
                 WhiteBox = QLabel(GOLWindow)
-                WhiteBox.setGeometry(0, 0, 10, 10)  # Set position and size of the box
+                # WhiteBox.setGeometry(0, 0, 10, 10)  # Set position and size of the box
                 WhiteBox.setFixedWidth(int((GOLWindowHeight/len(cellGrid))*0.8))
                 WhiteBox.setFixedHeight(int((GOLWindowHeight/len(cellGrid))*0.8))
                 WhiteBox.setStyleSheet(
@@ -155,7 +157,7 @@ def generateGridLayout(cellGrid, GOLWindow, GOLWindowWidth, GOLWindowHeight):
                 GOLBoardRowLayout.addWidget(WhiteBox)
             else:
                 BlackBox = QLabel(GOLWindow)
-                BlackBox.setGeometry(0, 0, 10, 10)  # Set position and size of the box
+                # BlackBox.setGeometry(0, 0, 10, 10)  # Set position and size of the box
                 BlackBox.setFixedWidth(int((GOLWindowHeight/len(cellGrid))*0.8))
                 BlackBox.setFixedHeight(int((GOLWindowHeight/len(cellGrid))*0.8))
                 BlackBox.setStyleSheet(
@@ -176,8 +178,22 @@ def generateGridLayout(cellGrid, GOLWindow, GOLWindowWidth, GOLWindowHeight):
     return(GOLBoardLayout)
 
 
-def updateGUI():
-    pass
+def updateForwardGUI():
+    singleCycle(cellGrid=GOL_LIST[CURRENT_STEP])
+    updateCurrentStep(1)
+
+def updateBackwardGUI():
+    if(CURRENT_STEP == 0):
+        updateCurrentStep(0)
+    else:
+        updateCurrentStep(-1)
+
+def updateCurrentStep(value):
+    global CURRENT_STEP
+    print(CURRENT_STEP)
+    CURRENT_STEP += value
+    # return CURRENT_STEP + value
+
 
 def generateGrid(xDim, yDim, choice):
     # The final grid of cells
@@ -195,6 +211,7 @@ def generateGrid(xDim, yDim, choice):
             cellRow.append(cell)
         cellGrid.append(cellRow)
 
+    GOL_LIST.append(cellGrid)
     return cellGrid
 
 # Shows the current state of the grid
