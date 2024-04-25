@@ -1,8 +1,11 @@
 import random
-AXONAL_UPPER=23
-AXONAL_LOWER=17
-NO_DEGENERATION_CHANCE=0.02
-DOUBLE_DEGENERATION_CHANCE=0.02
+
+AXONAL_LOWER = 15
+AXONAL_UPPER = 20
+
+NO_DEGENERATION_CHANCE = 0.02
+DOUBLE_DEGENERATION_CHANCE = 0.02
+
 class Cell:
     def __init__(self, isAlive: int):
         self.isAlive = isAlive
@@ -60,12 +63,7 @@ class Cell:
             # Cell becomes alive due to reproduction
             self.isAlive = 1
             
-        
         self.decayAxonalNumber()
-
-
-    
-   
 
     def updateNeighbours(self, topNeighbour, bottomNeighbour, leftNeighbour, rightNeighbour, topLeftNeighbour, topRightNeighbour, bottomLeftNeighbour, bottomRightNeighbour):
         """Updates the neighbor information for the current cell."""

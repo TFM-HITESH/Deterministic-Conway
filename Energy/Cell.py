@@ -6,6 +6,7 @@ class Cell:
     
         # Initialize energy level
         self.energy = 100 if self.isAlive else 0  # Starting energy for alive cells
+        
         self.top = 0
         self.bottom = 0
         self.left = 0

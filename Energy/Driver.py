@@ -1,10 +1,22 @@
 from Cell import Cell
+import matplotlib.pyplot as plt
 import random
 import time
+
+X_DIM = 80
+Y_DIM = 80
+ALIVE_CELL = Cell(1)
+DEAD_CELL = Cell(0)
+
+GOL_LIST = []
+ALIVE_COUNT_LIST = []
+
+N = 100
+
 def main():
     # Display start position
     print("Start Position:")
-    cellGrid = generateGrid(xDim=10, yDim=10, choice=2)  # Random initial state
+    cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=-1)  # Random initial state
     printGrid(cellGrid)
 
     # Optional: Specify a custom initial grid configuration
@@ -20,28 +32,31 @@ def main():
         [0, 1, 0, 0, 1, 0, 0, 0, 1, 0],
         [0, 1, 0, 0, 1, 1, 1, 1, 1, 0]
     ]
-    startGrid2=[[0,0,1,0,0,0,0,0,0,0],
-               [0,0,0,1,0,0,0,0,0,0],
-               [0,1,1,1,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0],
-               [0,0,0,0,0,0,0,0,0,0]]
     print("User updated positions:")
-    generateGridStart(cellGrid=cellGrid, startGrid=startGrid2)
+    # generateGridStart(cellGrid=cellGrid, startGrid=startGrid2)
     printGrid(cellGrid)
 
     # Number of cycles to simulate
-    n = int(input("Enter number of cycles: "))
 
-    for i in range(n):
-        time.sleep(1)
-        print(f"Cycle Number = {i + 1}")
+
+    updateGridNeighbours(cellGrid=cellGrid)
+    print("The grid is now prepared and we are ready to start the Game of life !")
+
+    # n = int(input("Enter number of cycles : "))
+
+    print(aliveNumber(cellGrid))
+
+    for i in range(N):
+        time.sleep(0.1)
+        print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
-        printGrid(cellGrid)
+        GOL_LIST.append(cellGrid)
+        printGrid(GOL_LIST[i])
+        ALIVE_COUNT_LIST.append(aliveNumber(GOL_LIST[i]))
+        print("Number of alive cells in this generation = ", aliveNumber(cellGrid=cellGrid))
+
+    # Finally draw the graph of population over time
+    drawGraph(N)
 
 def generateGrid(xDim, yDim, choice):
     """Generate the initial grid of cells."""
@@ -114,6 +129,19 @@ def singleCycle(cellGrid):
             cell.updateAlive()  # This now includes energy dynamics
 
     return cellGrid
+
+def aliveNumber(cellGrid):
+    aliveCount = 0
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
+            if(cellGrid[row][col].isAlive == 1):
+                aliveCount +=1 
+    
+    return aliveCount
+
+def drawGraph(n):
+    plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='r', label='Scatter Plot')
+    plt.show()
 
 if __name__ == "__main__":
     main()
