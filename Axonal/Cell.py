@@ -39,7 +39,7 @@ class Cell:
         if chance < DOUBLE_DEGENERATION_CHANCE:
             # Decrease by 2 with 2% chance
             self.axonalNumber -= 2
-        elif chance >1- NO_DEGENERATION_CHANCE:
+        elif chance > 1 - NO_DEGENERATION_CHANCE:
             # No change with 2% chance
             pass
         else:
@@ -62,6 +62,7 @@ class Cell:
         elif not self.isAlive and neighbors == 3 and self.axonalNumber > 0:
             # Cell becomes alive due to reproduction
             self.isAlive = 1
+            self.axonalNumber = random.randint(AXONAL_LOWER, AXONAL_UPPER)
             
         self.decayAxonalNumber()
 

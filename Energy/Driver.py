@@ -1,5 +1,6 @@
 from Cell import Cell
 import matplotlib.pyplot as plt
+import numpy as np
 import random
 import time
 
@@ -11,7 +12,7 @@ DEAD_CELL = Cell(0)
 GOL_LIST = []
 ALIVE_COUNT_LIST = []
 
-N = 100
+N = 38
 
 def main():
     # Display start position
@@ -47,7 +48,7 @@ def main():
     print(aliveNumber(cellGrid))
 
     for i in range(N):
-        time.sleep(0.1)
+        time.sleep(0.05)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
         GOL_LIST.append(cellGrid)
@@ -140,7 +141,15 @@ def aliveNumber(cellGrid):
     return aliveCount
 
 def drawGraph(n):
+    # Plots the scatter points
     plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='r', label='Scatter Plot')
+
+    # Line of best fit
+    theta = np.polyfit(range(0,n), ALIVE_COUNT_LIST, 1)
+    yLine = theta[1] + theta[0] * range(0,n)
+
+    plt.plot(range(0,n), yLine, 'b')
+    
     plt.show()
 
 if __name__ == "__main__":
