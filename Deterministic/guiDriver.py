@@ -116,7 +116,6 @@ def generateGUI():
 
     GOLBoardLayout = generateGridLayout(GOL_LIST[CURRENT_STEP], GOLWindow=GOLWindow, GOLWindowWidth=GOLWindowWidth, GOLWindowHeight=GOLWindowHeight)
 
-
     GOLLayout.addWidget(titleLabel)
     GOLLayout.addLayout(GOLBoardLayout)
     GOLLayout.addLayout(GOLButtonLayout)

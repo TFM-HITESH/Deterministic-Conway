@@ -1,160 +1,22 @@
-# from Cell import Cell
-# import random
-# import time
-
-# X_DIM = 10
-# Y_DIM = 10
-# ALIVE_CELL = Cell(1)
-# DEAD_CELL = Cell(0)
-# pl = [0.99, 0.95, 0.95, 0.95, 0.9, 0.9, 0.85, 0.85, 0.85]
-# #c1 is top left cell and then move clockwise 
-
-
-# def get_pl():
-#     return pl
-# def main():
-#     print("Start Position : ")
-#     cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=0)
-#     printGrid(cellGrid)
-
-#     startGrid=[[0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,1,0,0,0,0,0,0],
-#                [0,0,0,0,1,0,0,0,0,0],
-#                [0,0,1,1,1,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0],
-#                [0,0,0,0,0,0,0,0,0,0]]
-    
-#     print("User updated positions : ")
-#     generateGridStart(cellGrid=cellGrid, startGrid=startGrid
-#                       )
-#     printGrid(cellGrid)
-
-#     # Preparing the grid and giving info about number of neighbours
-#     updateGridNeighbours(cellGrid=cellGrid)
-#     print("The grid is now prepared and we are ready to start the Game of life !")
-
-
-#     n = int(input("Enter number of cycles : "))
-
-#     for i in range(n):
-#         time.sleep(0.4)
-#         print("Cycle Number = ", i+1)
-#         cellGrid = singleCycle(cellGrid=cellGrid)
-#         printGrid(cellGrid=cellGrid)
-        
-    
-
-# def generateGrid(xDim, yDim, choice):
-#     # The final grid of cells
-#     cellGrid = []
-
-#     for row in range(yDim):
-#         cellRow = []
-#         for col in range(xDim):
-#             if (choice == 0):
-#                 cell = Cell(0)
-#             elif (choice == 1):
-#                 cell = Cell(1)
-#             else:
-#                 cell = Cell(random.choice([0,1]))
-#             cellRow.append(cell)
-#         cellGrid.append(cellRow)
-
-#     return cellGrid
-
-# # Shows the current state of the grid
-# def printGrid(cellGrid):
-
-#     for cellRow in cellGrid:
-#         for cell in cellRow:
-#             # Invoked cell printer
-#             cell.printCell()
-#         print()
-
-# # Updates the grid with the starting connfiguration provided by the user
-# def generateGridStart(cellGrid, startGrid):
-#     for row in range(len(cellGrid)):
-#         for col in range(len(cellGrid[row])):
-#             cellGrid[row][col].isAlive = startGrid[row][col]
-
-# # Updates the grid, killing off the cells that must die
-# def updateGrid(cellGrid):
-#     for row in range(1, len(cellGrid)-1):
-#         for col in range(1, len(cellGrid[row])-1):
-#             cellGrid[row][col].updateAlive()
-
-# #Updates everyone's neighbours, based on the new grid
-# def updateGridNeighbours(cellGrid):
-#     for row in range(len(cellGrid)):
-#         for col in range(len(cellGrid[row])):
-        
-#             pl=get_pl()
-#             #top = row--, bottom = row++, left = col--, right = col++
-#             try:
-#                 topRight = cellGrid[row - 1][col + 1].findSum(pl)
-#             except:
-#                 topRight = DEAD_CELL
-#             try:
-#                 topLeft = cellGrid[row - 1][col - 1].findSum(pl)
-#             except:
-#                 topLeft = DEAD_CELL
-#             try:
-#                 bottomRight = cellGrid[row + 1][col + 1].findSum(pl)
-#             except:
-#                 bottomRight = DEAD_CELL
-#             try:
-#                 bottomLeft = cellGrid[row + 1][col - 1].findSum(pl)
-#             except:
-#                 bottomLeft = DEAD_CELL
-#             try:
-#                 top = cellGrid[row - 1][col].findSum(pl)
-#             except:
-#                 top = DEAD_CELL
-#             try:
-#                 bottom = cellGrid[row + 1][col].findSum(pl)
-#             except: 
-#                 bottom = DEAD_CELL
-#             try:
-#                 left = cellGrid[row][col - 1].findSum(pl)
-#             except:
-#                 left = DEAD_CELL
-#             try: 
-#                 right = cellGrid[row][col + 1].findSum(pl) 
-#             except:
-#                 right = DEAD_CELL
-            
-#             # Updating the neighbours
-#             cellGrid[row][col].updateNeighbours(topRightNeighbour=topRight, topLeftNeighbour=topLeft, bottomRightNeighbour=bottomRight, bottomLeftNeighbour=bottomLeft, topNeighbour=top, bottomNeighbour=bottom, rightNeighbour=right, leftNeighbour=left)
-
-# def singleCycle(cellGrid):
-#     updateGrid(cellGrid=cellGrid)
-#     updateGridNeighbours(cellGrid=cellGrid)
-
-#     return cellGrid
-
-# if __name__ == "__main__":
-#     main()
-
-
-
-
-
-
-
 from Cell import Cell
+import matplotlib.pyplot as plt
 import random
 import time
 
-X_DIM = 10
-Y_DIM = 10
-pl=[0.99, 0.95, 0.95, 0.95, 0.9, 0.9, 0.85, 0.85, 0.85]
-def get_pl():
-    return pl
+X_DIM = 80
+Y_DIM = 80
+ALIVE_CELL = Cell(1)
+DEAD_CELL = Cell(0)
 
+PROBABILITY_LIVING=[0.99, 0.95, 0.95, 0.95, 0.9, 0.9, 0.85, 0.85, 0.85]
+
+GOL_LIST = []
+ALIVE_COUNT_LIST = []
+
+N = 38
+
+def get_pl():
+    return PROBABILITY_LIVING
 
 def main():
     print("Start Position : ")
@@ -182,13 +44,21 @@ def main():
     updateGridNeighbours(cellGrid=cellGrid)
     print("The grid is now prepared and we are ready to start the Game of life !")
 
-    n = int(input("Enter number of cycles : "))
+    # n = int(input("Enter number of cycles : "))
 
-    for i in range(n):
-        time.sleep(0.4)
+    print(aliveNumber(cellGrid))
+
+    for i in range(N):
+        time.sleep(0.1)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
-        printGrid(cellGrid=cellGrid)
+        GOL_LIST.append(cellGrid)
+        printGrid(GOL_LIST[i])
+        ALIVE_COUNT_LIST.append(aliveNumber(GOL_LIST[i]))
+        print("Number of alive cells in this generation = ", aliveNumber(cellGrid=cellGrid))
+
+    # Finally draw the graph of population over time
+    drawGraph(N)
         
 def generateGrid(xDim, yDim, choice):
     # The final grid of cells
@@ -198,9 +68,9 @@ def generateGrid(xDim, yDim, choice):
         cellRow = []
         for col in range(xDim):
             if choice == 0:
-                cell = Cell(0)
+                cell = DEAD_CELL
             elif choice == 1:
-                cell = Cell(1)
+                cell = ALIVE_CELL
             else:
                 cell = Cell(random.choice([0,1]))
             cellRow.append(cell)
@@ -264,7 +134,19 @@ def updateGridNeighbours(cellGrid):
             # Updating the neighbors
             cellGrid[row][col].updateNeighbours(topNeighbour, bottomNeighbour, leftNeighbour, rightNeighbour,topLeftNeighbour, topRightNeighbour, bottomLeftNeighbour,bottomRightNeighbour, pl)
             
-            
+def aliveNumber(cellGrid):
+    aliveCount = 0
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
+            if(cellGrid[row][col].isAlive == 1):
+                aliveCount +=1 
+    
+    return aliveCount
+
+def drawGraph(n):
+    plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='r', label='Scatter Plot')
+    plt.show()
+
 if __name__ == "__main__":
     main()
 

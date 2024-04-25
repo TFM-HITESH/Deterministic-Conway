@@ -1,18 +1,23 @@
 from Cell import Cell
+import matplotlib.pyplot as plt
 import random
 import time
 
 
 # global variables
-X_DIM = 10
-Y_DIM = 10
+X_DIM = 80
+Y_DIM = 80
 ALIVE_CELL = Cell(1)
 DEAD_CELL = Cell(0)
 
+GOL_LIST = []
+ALIVE_COUNT_LIST = []
+
+N = 38
 
 def main():
     print("Start Position : ")
-    cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=0)
+    cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=-1)
     printGrid(cellGrid)
 
     startGrid=[[0,0,0,0,0,0,0,0,0,0],
@@ -27,8 +32,7 @@ def main():
                [0,0,0,0,0,0,0,0,0,0]]
     
     print("User updated positions : ")
-    generateGridStart(cellGrid=cellGrid, startGrid=startGrid
-                      )
+    # generateGridStart(cellGrid=cellGrid, startGrid=startGrid)
     printGrid(cellGrid)
 
     # Preparing the grid and giving info about number of neighbours
@@ -36,13 +40,21 @@ def main():
     print("The grid is now prepared and we are ready to start the Game of life !")
 
 
-    n = int(input("Enter number of cycles : "))
+    # n = int(input("Enter number of cycles : "))
 
-    for i in range(n):
-        time.sleep(0.4)
+    print(aliveNumber(cellGrid))
+
+    for i in range(N):
+        time.sleep(0.1)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
-        printGrid(cellGrid=cellGrid)
+        GOL_LIST.append(cellGrid)
+        printGrid(GOL_LIST[i])
+        ALIVE_COUNT_LIST.append(aliveNumber(GOL_LIST[i]))
+        print("Number of alive cells in this generation = ", aliveNumber(cellGrid=cellGrid))
+
+    # Finally draw the graph of population over time
+    drawGraph(N)
         
     
 
@@ -129,8 +141,20 @@ def updateGridNeighbours(cellGrid):
 def singleCycle(cellGrid):
     updateGrid(cellGrid=cellGrid)
     updateGridNeighbours(cellGrid=cellGrid)
-
     return cellGrid
+
+def aliveNumber(cellGrid):
+    aliveCount = 0
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
+            if(cellGrid[row][col].isAlive == 1):
+                aliveCount +=1 
+    
+    return aliveCount
+
+def drawGraph(n):
+    plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='r', label='Scatter Plot')
+    plt.show()
 
 if __name__ == "__main__":
     main()

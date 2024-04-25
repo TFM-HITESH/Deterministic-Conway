@@ -1,6 +1,17 @@
 from Cell import Cell
 import random
 import time
+
+X_DIM = 80
+Y_DIM = 80
+ALIVE_CELL = Cell(1)
+DEAD_CELL = Cell(0)
+
+GOL_LIST = []
+ALIVE_COUNT_LIST = []
+
+N = 38
+
 def main():
     # Display start position
     print("Start Position:")
