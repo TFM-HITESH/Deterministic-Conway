@@ -4,8 +4,8 @@ import numpy as np
 import random
 import time
 
-X_DIM = 80
-Y_DIM = 80
+X_DIM = 60
+Y_DIM = 60
 ALIVE_CELL = Cell(1)
 DEAD_CELL = Cell(0)
 
@@ -142,13 +142,15 @@ def aliveNumber(cellGrid):
 
 def drawGraph(n):
     # Plots the scatter points
-    plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='r', label='Scatter Plot')
+    plt.plot(range(0,n), ALIVE_COUNT_LIST, marker='o', linestyle='', markersize=8, color='darksalmon', label='Scatter Plot')
 
     # Line of best fit
     theta = np.polyfit(range(0,n), ALIVE_COUNT_LIST, 1)
     yLine = theta[1] + theta[0] * range(0,n)
 
-    plt.plot(range(0,n), yLine, 'b')
+    print("y = ", round(theta[0],4), "* x +", round(theta[1],4))
+
+    plt.plot(range(0,n), yLine, 'maroon')
     
     plt.show()
 
