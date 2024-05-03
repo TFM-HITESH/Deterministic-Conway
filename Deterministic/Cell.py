@@ -51,7 +51,7 @@ class Cell:
                 self.isAlive = 0 
                 # Dies of underpopulation
             elif(neighbours >= MIN_POPULATION and neighbours <= MAX_POPULATION):
-                self.isAlive = 1
+                self.isAlive = self.isAlive
                 # Lives on
             elif(neighbours > MAX_POPULATION):
                 self.isAlive = 0

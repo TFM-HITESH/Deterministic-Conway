@@ -84,7 +84,7 @@ class Cell:
      # Check if the cell is alive and has a positive axonal number
      if self.isAlive:
         # Decrease energy for a living cell (sink)
-        self.energy -= random.randint(15,20)  # Amount of energy consumed per cycle (you can adjust this value)
+        self.energy -= random.randint(20,25)  # Amount of energy consumed per cycle (you can adjust this value)
         if self.energy <= 0:
             self.isAlive = 0
             self.energy = 0  # The cell dies due to energy exhaustion
@@ -98,13 +98,13 @@ class Cell:
         if self.energy >= 100:
             self.isAlive = 1
             self.energy = 100  # Reset energy level for new alive cell
-        elif neighborEnergy >= 75:
+        elif neighborEnergy >= 150:
             # Cell becomes alive due to reproduction
             self.isAlive = 1
             self.energy = 100  # Set energy to maximum for new alive cell
         else:
             # Increase energy for a dead cell (source)
-            self.energy += random.randint(15,30)  # Amount of energy produced per cycle (adjust this value as needed)
+            self.energy += random.randint(15,20)  # Amount of energy produced per cycle (adjust this value as needed)
     
 
       
