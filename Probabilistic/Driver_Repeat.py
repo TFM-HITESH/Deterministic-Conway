@@ -2,15 +2,15 @@ from Cell import Cell
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-import statistics
 import time
+import statistics
 
-
-# global variables
 X_DIM = 60
 Y_DIM = 60
 ALIVE_CELL = Cell(1)
 DEAD_CELL = Cell(0)
+
+PROBABILITY_LIVING=[0.99, 0.95, 0.95, 0.95, 0.9, 0.9, 0.85, 0.85, 0.85]
 
 GOL_LIST = []
 ALIVE_COUNT_LIST = []
@@ -19,7 +19,7 @@ N = 38
 
 X_VALS = []
 C_VALS = []
-CYCLES = 10000
+CYCLES = 3
 
 def main():
     for i in range(CYCLES):
@@ -72,6 +72,9 @@ def main():
 
     plt.show()
 
+def get_pl():
+    return PROBABILITY_LIVING
+
 def fullCycle():
     print("Start Position : ")
     cellGrid = generateGrid(xDim=X_DIM, yDim=Y_DIM, choice=-1)
@@ -87,7 +90,7 @@ def fullCycle():
     print(aliveNumber(cellGrid))
 
     for i in range(N):
-        # time.sleep(0.01)
+        time.sleep(0.05)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
         GOL_LIST.append(cellGrid)
@@ -98,8 +101,6 @@ def fullCycle():
     # Finally draw the graph of population over time
     drawGraph(N)
         
-    
-
 def generateGrid(xDim, yDim, choice):
     # The final grid of cells
     cellGrid = []
@@ -107,10 +108,10 @@ def generateGrid(xDim, yDim, choice):
     for row in range(yDim):
         cellRow = []
         for col in range(xDim):
-            if (choice == 0):
-                cell = Cell(0)
-            elif (choice == 1):
-                cell = Cell(1)
+            if choice == 0:
+                cell = DEAD_CELL
+            elif choice == 1:
+                cell = ALIVE_CELL
             else:
                 cell = Cell(random.choice([0,1]))
             cellRow.append(cell)
@@ -120,71 +121,60 @@ def generateGrid(xDim, yDim, choice):
 
 # Shows the current state of the grid
 def printGrid(cellGrid):
-
     for cellRow in cellGrid:
         for cell in cellRow:
             # Invoked cell printer
             cell.printCell()
         print()
 
-# Updates the grid with the starting connfiguration provided by the user
-def generateGridStart(cellGrid, startGrid):
-    for row in range(len(cellGrid)):
-        for col in range(len(cellGrid[row])):
-            cellGrid[row][col].isAlive = startGrid[row][col]
-
-# Updates the grid, killing off the cells that must die
-def updateGrid(cellGrid):
-    for row in range(1, len(cellGrid)-1):
-        for col in range(1, len(cellGrid[row])-1):
-            cellGrid[row][col].updateAlive()
-
-#Updates everyone's neighbours, based on the new grid
-def updateGridNeighbours(cellGrid):
-    for row in range(len(cellGrid)):
-        for col in range(len(cellGrid[row])):
-            #top = row--, bottom = row++, left = col--, right = col++
-            try:
-                topRight = cellGrid[row - 1][col + 1]
-            except:
-                topRight = DEAD_CELL
-            try:
-                topLeft = cellGrid[row - 1][col - 1]
-            except:
-                topLeft = DEAD_CELL
-            try:
-                bottomRight = cellGrid[row + 1][col + 1]
-            except:
-                bottomRight = DEAD_CELL
-            try:
-                bottomLeft = cellGrid[row + 1][col - 1]
-            except:
-                bottomLeft = DEAD_CELL
-            try:
-                top = cellGrid[row - 1][col]
-            except:
-                top = DEAD_CELL
-            try:
-                bottom = cellGrid[row + 1][col]
-            except: 
-                bottom = DEAD_CELL
-            try:
-                left = cellGrid[row][col - 1]
-            except:
-                left = DEAD_CELL
-            try: 
-                right = cellGrid[row][col + 1] 
-            except:
-                right = DEAD_CELL
-            
-            # Updating the neighbours
-            cellGrid[row][col].updateNeighbours(topRightNeighbour=topRight, topLeftNeighbour=topLeft, bottomRightNeighbour=bottomRight, bottomLeftNeighbour=bottomLeft, topNeighbour=top, bottomNeighbour=bottom, rightNeighbour=right, leftNeighbour=left)
-
 def singleCycle(cellGrid):
     updateGrid(cellGrid=cellGrid)
     updateGridNeighbours(cellGrid=cellGrid)
     return cellGrid
 
+def generateGridStart(cellGrid, startGrid):
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
+            cellGrid[row][col].isAlive = startGrid[row][col]
+
+def updateGrid(cellGrid):
+    for row in range(1, len(cellGrid)-1):
+        for col in range(1, len(cellGrid[row])-1):
+            cellGrid[row][col].updateAlive(get_pl())
+
+def updateGridNeighbours(cellGrid):
+    pl = get_pl()  # Get the probability list
+    for row in range(len(cellGrid)):
+        for col in range(len(cellGrid[row])):
+            # Calculate row and column indices for neighbors
+            top_row = row - 1
+            bottom_row = row + 1
+            left_col = col - 1
+            right_col = col + 1
+
+            # Check boundaries to handle edge cases
+            if top_row < 0:
+                top_row = 0
+            if bottom_row >= len(cellGrid):
+                bottom_row = len(cellGrid) - 1
+            if left_col < 0:
+                left_col = 0
+            if right_col >= len(cellGrid[row]):
+                right_col = len(cellGrid[row]) - 1
+
+            # Get neighbors
+            topNeighbour = cellGrid[top_row][col]
+            bottomNeighbour = cellGrid[bottom_row][col]
+            leftNeighbour = cellGrid[row][left_col]
+            rightNeighbour = cellGrid[row][right_col]
+            topLeftNeighbour = cellGrid[top_row][left_col]
+            topRightNeighbour = cellGrid[top_row][right_col]
+            bottomLeftNeighbour = cellGrid[bottom_row][left_col]
+            bottomRightNeighbour = cellGrid[bottom_row][right_col]
+
+            # Updating the neighbors
+            cellGrid[row][col].updateNeighbours(topNeighbour, bottomNeighbour, leftNeighbour, rightNeighbour,topLeftNeighbour, topRightNeighbour, bottomLeftNeighbour,bottomRightNeighbour, pl)
+            
 def aliveNumber(cellGrid):
     aliveCount = 0
     for row in range(len(cellGrid)):
@@ -208,3 +198,4 @@ def drawGraph(n):
 
 if __name__ == "__main__":
     main()
+
