@@ -19,32 +19,55 @@ N = 38
 
 X_VALS = []
 C_VALS = []
-CYCLES = 5
+CYCLES = 100
 
 def main():
-    
     for i in range(CYCLES):
         fullCycle()
 
-    print("Mean of slopes =",round(statistics.mean(X_VALS),4))
-    print("Mean of intercepts =", round(statistics.mean(C_VALS),4))
+    slopeMean = round(statistics.mean(X_VALS),4)
+    interceptMean = round(statistics.mean(C_VALS),4)
+    slopeVariance = round(statistics.variance(X_VALS,4))
+    interceptVariance = round(statistics.variance(C_VALS,4))
+    slopeSD = round(statistics.stdev(X_VALS,4))
+    interceptSD = round(statistics.stdev(C_VALS,4))
 
-    fig, (pl1, pl2) = plt.subplots(1, 2)
+    cor = statistics.correlation(X_VALS,C_VALS)
+
+    print("Mean of slopes =", slopeMean)
+    print("Mean of intercepts =", interceptMean)
+    print("Variance of slopes =", slopeVariance)
+    print("Variance of intercepts =", interceptVariance)
+    print("Standard Deviation of slopes =", slopeSD)
+    print("Standard Deviation of intercepts =", interceptSD)
+    print("Correlation between m and c values =", cor)
+
+    fig, (pl1, pl2) = plt.subplots(2,1)
     fig.suptitle('Values of slope and intercept of population regression over 10000 Cycles')
+    fig.supxlabel("Number of Trials")
+    
 
     pl1.plot(range(0,CYCLES), X_VALS, marker='o', linestyle='', markersize=8, color='darkcyan', label='Scatter Plot' )
-    thetaX = np.polyfit(range(0,CYCLES), X_VALS, 1)
-    yLineX = thetaX[1] + thetaX[0] * range(0,CYCLES)
-    print("y = ", round(thetaX[0],4), "* x +", round(thetaX[1],4))
+    # thetaX = np.polyfit(range(0,CYCLES), X_VALS, 1)
+    yLineX = [slopeMean] * len(X_VALS)
+    # print("y = ", round(thetaX[0],4), "* x +", round(thetaX[1],4))
     pl1.set_title("Values of Slope(m) for regression obtained over the results from CGOL")
+    pl1.set_ylabel("Value of Slope for CGOL Population")
     pl1.plot(range(0,CYCLES), yLineX, 'b')
+    pl1.legend(['Slope value for nth trial', 'Mean'])
+    slopeText = "Mean of slopes = " + str(slopeMean)
+    pl1.text(0.9, 0.1, slopeText, horizontalalignment='center', verticalalignment='center', transform=pl1.transAxes)
 
     pl2.plot(range(0,CYCLES), C_VALS, marker='o', linestyle='', markersize=8, color='orange', label='Scatter Plot' )
-    thetaC = np.polyfit(range(0,CYCLES), C_VALS, 1)
-    yLineC = thetaC[1] + thetaC[0] * range(0,CYCLES)
-    print("y = ", round(thetaC[0],4), "* x +", round(thetaC[1],4))
+    # thetaC = np.polyfit(range(0,CYCLES), C_VALS, 1)
+    yLineC = [interceptMean] * len(X_VALS)
+    # print("y = ", round(thetaC[0],4), "* x +", round(thetaC[1],4))
     pl2.set_title("Values of Intercept(c) for regression obtained over the results from CGOL")
+    pl2.set_ylabel("Value of Intercept for CGOL Population")
     pl2.plot(range(0,CYCLES), yLineC, 'r')
+    pl2.legend(['Intercept value for nth trial', 'Mean'])
+    interceptText = "Mean of intercepts = " + str(interceptMean)
+    pl2.text(0.9, 0.1, interceptText, horizontalalignment='center', verticalalignment='center', transform=pl2.transAxes)
 
     plt.show()
 
