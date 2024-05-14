@@ -17,7 +17,7 @@ N = 38
 
 X_VALS = []
 C_VALS = []
-CYCLES = 10
+CYCLES = 1000
 
 def main():
     for i in range(CYCLES):
@@ -42,31 +42,31 @@ def main():
     print("Correlation between m and c values =", cor)
 
     fig, (pl1, pl2) = plt.subplots(2,1)
-    fig.suptitle('Values of slope and intercept of population regression over 10000 Cycles')
+    fig.suptitle('Values of slope and intercept of population regression over 1000 Cycles')
     fig.supxlabel("Number of Trials")
     
 
-    pl1.plot(range(0,CYCLES), X_VALS, marker='o', linestyle='', markersize=8, color='darkcyan', label='Scatter Plot' )
+    pl1.plot(range(0,CYCLES), X_VALS, marker='o', linestyle='', markersize=8, color='greenyellow', label='Scatter Plot' )
     # thetaX = np.polyfit(range(0,CYCLES), X_VALS, 1)
     yLineX = [slopeMean] * len(X_VALS)
     # print("y = ", round(thetaX[0],4), "* x +", round(thetaX[1],4))
-    pl1.set_title("Values of Slope(m) for regression obtained over the results from CGOL")
-    pl1.set_ylabel("Value of Slope for CGOL Population")
-    pl1.plot(range(0,CYCLES), yLineX, 'b')
+    pl1.set_title("Values of Slope(m) for regression obtained over the results from CDEGOL")
+    pl1.set_ylabel("Value of Slope for CDEGOL Population")
+    pl1.plot(range(0,CYCLES), yLineX, 'darkgreen')
     pl1.legend(['Slope value for nth trial', 'Mean'])
-    slopeText = "Mean of slopes = " + str(slopeMean)
-    pl1.text(0.9, 0.1, slopeText, horizontalalignment='center', verticalalignment='center', transform=pl1.transAxes)
+    # slopeText = "Mean of slopes = " + str(slopeMean)
+    # pl1.text(0.9, 0.1, slopeText, horizontalalignment='center', verticalalignment='center', transform=pl1.transAxes)
 
     pl2.plot(range(0,CYCLES), C_VALS, marker='o', linestyle='', markersize=8, color='orange', label='Scatter Plot' )
     # thetaC = np.polyfit(range(0,CYCLES), C_VALS, 1)
     yLineC = [interceptMean] * len(X_VALS)
     # print("y = ", round(thetaC[0],4), "* x +", round(thetaC[1],4))
-    pl2.set_title("Values of Intercept(c) for regression obtained over the results from CGOL")
-    pl2.set_ylabel("Value of Intercept for CGOL Population")
+    pl2.set_title("Values of Intercept(c) for regression obtained over the results from CDEGOL")
+    pl2.set_ylabel("Value of Intercept for CDEGOL Population")
     pl2.plot(range(0,CYCLES), yLineC, 'r')
     pl2.legend(['Intercept value for nth trial', 'Mean'])
-    interceptText = "Mean of intercepts = " + str(interceptMean)
-    pl2.text(0.9, 0.1, interceptText, horizontalalignment='center', verticalalignment='center', transform=pl2.transAxes)
+    # interceptText = "Mean of intercepts = " + str(interceptMean)
+    # pl2.text(0.9, 0.1, interceptText, horizontalalignment='center', verticalalignment='center', transform=pl2.transAxes)
 
     plt.show()
 
@@ -86,7 +86,7 @@ def fullCycle():
     print(aliveNumber(cellGrid))
 
     for i in range(N):
-        time.sleep(0.05)
+        # time.sleep(0.05)
         print("Cycle Number = ", i+1)
         cellGrid = singleCycle(cellGrid=cellGrid)
         GOL_LIST.append(cellGrid)
